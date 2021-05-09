@@ -20,7 +20,9 @@ VALUES
   ('Иван', '1998-01-12', NULL, NULL),
   ('Мария', '2006-08-29', NULL, NULL);
   
-  
+SELECT * FROM users;
+UPDATE users SET created_at = NOW(), updated_at = NOW();
+
 -- Тема Операции, задание 2
 -- Таблица users была неудачно спроектирована.
 -- Записи created_at и updated_at были заданы типом VARCHAR и в них долгое время помещались
@@ -44,6 +46,20 @@ VALUES
   ('Сергей', '1988-02-14', '21.10.2016 9:14', '21.10.2016 9:14'),
   ('Иван', '1998-01-12', '15.12.2016 12:45', '15.12.2016 12:45'),
   ('Мария', '2006-08-29', '12.01.2017 8:56', '12.01.2017 8:56');
+ 
+SELECT * FROM users;
+UPDATE users SET created_at = CONCAT(
+SUBSTRING(created_at, 7, 4),'-',
+SUBSTRING(created_at, 4, 2),'-',
+SUBSTRING(created_at, 1, 2),' ',
+SUBSTRING(created_at, -5, 5));
+ALTER TABLE users MODIFY COLUMN created_at DATETIME;
+UPDATE users SET updated_at = CONCAT(
+SUBSTRING(updated_at, 7, 4),'-',
+SUBSTRING(updated_at, 4, 2),'-',
+SUBSTRING(updated_at, 1, 2),' ',
+SUBSTRING(updated_at, -5, 5));
+ALTER TABLE users MODIFY COLUMN updated_at DATETIME;
 
 
 -- Тема Операции, задание 3
@@ -70,6 +86,8 @@ VALUES
   (1, 826, 30),
   (1, 719, 500),
   (1, 638, 1);
+ 
+SELECT * FROM storehouses_products ORDER BY value != 0 DESC, value;
 
 
 -- Тема Операции, задание 4
@@ -100,6 +118,8 @@ INSERT INTO catalogs VALUES
 -- Тема Агрегация, задание 1
 -- Подсчитайте средний возраст пользователей в таблице users
 
+SELECT FLOOR(avg(YEAR(NOW()) - YEAR(birthday_at))) FROM users;
+ 
 -- Таблица users создана для задания 2 темы Операции
 
 	  
@@ -107,12 +127,16 @@ INSERT INTO catalogs VALUES
 -- Подсчитайте количество дней рождения, которые приходятся на каждый из дней недели.
 -- Следует учесть, что необходимы дни недели текущего года, а не года рождения.
 
+SELECT birthday_at FROM users;
+SELECT COUNT(*) AS count_birthday, DAYNAME(
+CONCAT(
+YEAR(NOW()), 
+DATE_FORMAT(birthday_at, '-%m-%d'))
+) AS day_born FROM users GROUP BY day_born;
+
 -- Таблица users создана для задания 2 темы Операции
 
 -- Тема Агрегация, задание 3
 -- (по желанию) Подсчитайте произведение чисел в столбце таблицы
 
 -- Используйте таблицу catalogs, созданную для задания 5 темы Операции
-  
-
-
